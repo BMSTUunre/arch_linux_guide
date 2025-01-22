@@ -161,5 +161,71 @@
    ```shell
    userdbctl groups-of-user USER
    ```
-   
-
+23. Снова рефлектор будь он неладен
+   ```shell
+   reflector --threads 8 --country Russia --sort score --age 3 --save /etc/pacman.d/mirrorlist
+   ```
+24. Обновим системку
+   ```shell
+      pacman -Syu sudo
+   ```
+25. Задаем дефолтный редактор текстовиков
+   ```shell
+   EDITOR=vim
+   ```
+26. Раскомментировать wheel (я скажу какой)
+   ```shell
+   visudo
+   ```
+   раскоментить %wheel, который через строку после root
+27. Grub часть1
+   ```shell
+   pacman -S grub efibootmgr dosfstools mtoolso s-prober
+   ```
+28. Добавляем поддержку второй ос
+   ```shell
+   vim /etc/default/grub
+   ```
+В него после первого абзаца дописать ```GRUB_DISABLE_OS_PROBER=false```
+29. Grub часть2
+   ```shell
+   grub-install --target=x86_64-efi --bootloader-id=grub_uefi --recheck --efi-directory=/boot/EFI
+   ```
+30. Генерим конфиг для граба
+   ```shell
+   grub-mkconfig -o /boot/grub/grub.cfg
+   ```
+31. Установка всяких пакетов
+    Дисклеймер, они могут вам не подойти, ставлю под ноут Thinkpad T490
+    - Для проца
+       ```shell
+       pacman -Syu mesa vulkan-intel intel-media-driver libva-utils libva-intel-driver
+      ```
+    - Блютуз
+       ```shell
+       pacman -Syu bluez bluez-utils
+       systemctl enable bluetooth.service
+       ```
+    - Аудио
+       ```shell
+       pacman -Syu pipewire pipewire-audio pipewire-alsa pipewire-jack pipewire-pulse sof-firmware alsa-firmware
+       ```
+    - Нетворки и мелочи
+       ```shell
+       pacman -Syu dosfstools inetutils net-tools networkmanager traceroute usbutils xdg-user-dirs
+       systemctl enable NetworkManager.service
+       ```
+### Момент Истины
+32. Выходим из арччрута
+   ```shell
+   exit
+   ```
+33. Размонтируем диски
+   ```shell
+   umount -a
+   ```
+34. Перезагружаемя и выбираем при загрузке граб
+   ```shell
+   reboot
+   ```
+## Вуаля вы АрчЛинуксоид, теперь можете вые"%№!?&* в интернете: `i use arch btw`
