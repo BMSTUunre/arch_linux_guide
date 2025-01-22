@@ -85,5 +85,81 @@
   ```shell
   mkfs.ext4 /dev/nvme0n1p3
   ```
-
+10. Монтирование системы
+   ```shell
+   mount /dev/nvme0n1p3 /mnt
+   mount --mkdir /dev/nvme0n1p1 /mnt/boot
+   ```
+11. Пакстрапим систему
+   ```shell
+   pacstrap -K /mnt base base-devel pacman-contrib linux linux-headers linux-firmware intel-ucode e2fsprogs nano vim terminus-font
+   ```
+   `vim` - отсебятина ([Formak](https://github.com/Formak21) советует только nano)
+12. Генерируем фстаб (таблицу монтирования)
+   ```shell
+   genfstab -U /mnt >> /mnt/etc/fstab
+   ```
+13. Aрчшрутимся (далее команды будут из под арч шрута)
+   ```shell
+   arch-chroot /mnt
+   ```
+14. Время
+   ```shell
+   ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+   hwclock --systohc
+   ```
+15. Шрифты и кодировка в tty
+   ```shell
+   touch /etc/vconsole.conf
+   echo -e "FONT=ter-v32n\nFONT_MAP=8859-5\nKEYMAP=ruwin_cplk-UTF-8\n" > /etc/vconsole.conf
+   ```
+16. Тут все понятно
+   ```shell
+   echo -e 'LANG="en_US.UTF-8"' > /etc/locale.conf
+   ```
+   ```shell
+   vim /etc/locale.gen
+   ```
+   Раскомментировать `en_US.UTF-8` и `ru_RU.UTF-8`
+17. Cгенерировать локаль
+   ```shell
+   locale-gen
+   ```
+18. Задаем имя нашему прекрасному устройству
+   ```shell
+   echo "HOSTNAME" > /etc/hostname
+   ```
+   - где `HOSTNAME`- произвольное слово
+19. Записываем хосты
+   ```shell
+   vim /etc/hosts
+   ```
+   ВНИМАНИЕ ТУТ ТАБЫ, А НЕ ПРОБЕЛЫ
+   (Дописываете это в конец файла, не забудьте хостнейм поменять)
+   ```
+   127.0.0.1  localhost
+   ::1  localhost
+   127.0.1.1  HOSTNAME.localdomain  HOSTNAME
+   ```
+20. Пароль рута
+   ```shell
+   passwd
+   ```
+   Вводите запоминающийся, но сложный пароль для root`a 2 раза
+21. Создаем типичного юзера
+   ```shell
+   useradd -m USER
+   passwd USER
+   ```
+   - где `USER`- произвольное слово
+   Вводите запоминающийся, но сложный пароль для юзера 2 раза
+22. Даем юзеру права
+   ```shell
+   usermod -aG wheel,audio,video,optical,storage USER
+   ```
+   Проверить успешность команды можно через
+   ```shell
+   userdbctl groups-of-user USER
+   ```
+   
 
