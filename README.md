@@ -206,7 +206,7 @@
 
 27. Grub часть1
    ```shell
-   pacman -S grub efibootmgr dosfstools mtoolso s-prober
+   pacman -S grub efibootmgr dosfstools mtools os-prober
    ```
 
 28. Добавляем поддержку второй ос
